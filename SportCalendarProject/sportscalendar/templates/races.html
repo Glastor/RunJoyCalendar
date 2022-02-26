@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %} Index Page ***** {% endblock %}
+{% block header %}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/cards.css') }}">
+{% endblock %}
+{% block content %}
+
+
+<nav id="race-year-nav" class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href='/races/{{ thisyear.strftime("%Y") }}'>{{ thisyear.strftime("%Y") }}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#raceyear" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="raceyear">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href='/races/{{ nextyear.strftime("%Y") }}'>{{ nextyear.strftime("%Y") }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href='/races/{{ yearafter.strftime("%Y") }}'>{{ yearafter.strftime("%Y") }}</a>
+            </li>
+        </ul>
+
+    </div>
+</nav>
+
+
+<nav id="race-filter" class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href='{{ url_for("races", year=year) }}'>All</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#race-filt" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="race-filt">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href='{{ url_for("races", year=year, distance=5) }}'>5k</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href='{{ url_for("races", year=year, distance=10) }}'>10k</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href='{{ url_for("races", year=year, distance=21) }}'>Félmaraton</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href='{{ url_for("races", year=year, distance=42) }}'>Maraton</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href='{{ url_for("races", year=year, type="Ultra") }}'>Ultra</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href='{{ url_for("races", year=year, type="Relay") }}'>Váltó</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href='{{ url_for("races", year=year, type="Road") }}'>Road</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href='{{ url_for("races", year=year, type="Trail") }}'>Trail</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href='{{ url_for("races", year=year, type="Obstacle") }}'>Obstacle</a>
+            </li>
+
+        </ul>
+
+    </div>
+</nav>
+
+
+<!-- --------------------------------------Races Section --------------------------------------->
+<div>
+    <h1 class="text-center">Veresenyek {{ year }}</h1>
+  <div class="row container-fluid justify-content-md-center">
+    {% for race in races %}
+  <!-- RACE CARD -->
+     <div class="card mb-3 ml-4" style="width: 540px;">
+      <div class="row no-gutters">
+        <div class="col-md-12">
+          <div class="card-body">
+            <h4 class="card-title">{{ race.name }}</h4>
+            <p class="card-text">
+            <ul class="card-text">
+              <li><i class="fa fa-calendar-day"></i><span class="ml-2"> {{ race.start_date.strftime('%Y-%m-%d   %A  %H:%M') }} </span></li>
+              <li><i class="fa fa-map-marker-alt"></i><span class="ml-3">{{ race.event.country }} / {{ race.event.city }}</span></li>
+              <li><i class="fas fa-running"></i><span class="ml-3">{{ race.type }}</span></li>
+              <li><i class="fas fa-road"></i></i><span class="ml-3">{{ "{:g}".format(race.distance) }} km</span></li>
+              <li><i class="fas fa-at"></i></i><a href="{{ race.event.event_url }}" class="ml-3" target="_blank">{{ race.event.name }}</a></li>
+            </ul>
+            </p>
+              {% if current_user.is_authenticated == False %}
+              <a href="{{ url_for('register') }}" style="float: left;" type="button" class="btn-sm btn-success mb-3">Hozzáadás a versenyeimhez</a>
+              {% elif race not in current_user.following %}
+                <a href="{{ url_for('add_race', race_id=race.id) }}"><button style="float: left;" type="button" class="btn-sm btn-success mb-3">Hozzáadás a
+                                    versenyeimhez
+                                </button></a>
+              {% else %}
+                <a href="{{ url_for('remove_race', race_id=race.id) }}">
+                            <button style="float: right;" type="button" class="btn-sm btn-danger mb-3">Törlés a
+                                versenyeimből
+                            </button></a>
+              {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+     <!-- RACE CARD END -->
+{% endfor %}
+
+  </div>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block title %} Index Page ***** {% endblock %}
+{% block header %}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/cards.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js"></script>
+{% endblock %}
+{% block content %}
+<!---------------------------------Banner TOP -------------------------------------------->
+    <div class="container-fluid index-banner main_div">
+        <div class="row container sub_div">
+            <div class="col-lg-2 col-md-3 col-sm-8">
+                <a href="{{ url_for('register') }}" class="btn btn-lg btn-primary">Regisztráció</a>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-8">
+                <a href="{{ url_for('races') }}" class="btn btn-lg btn-light">Találd meg a következő versenyed</a>
+            </div>
+        </div>
+    </div>
+
+<!--------------------------------Middle NAVBAR--------------------------------->
+<nav id="mid-nav-country" class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href='{{ url_for("home",country="Hungary", year=year, month=month) }}'>Magyarország</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMidcountry" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarMidcountry">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country='Slovakia', year=year, month=month) }}">Szlovákia</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country='Slovenia', year=year, month=month) }}">Szlovénia</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country='Poland', year=year, month=month) }}">Lengyelország</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country='Austria', year=year, month=month) }}">Ausztria</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country='Germany', year=year, month=month) }}">Németország</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country='Romania', year=year, month=month) }}">Románia</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country='Czech Republic', year=year, month=month) }}">Csehország</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country='Croatia', year=year, month=month) }}">Horvátország</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country='Switzerland', year=year, month=month) }}">Svájc</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country='Italy', year=year, month=month) }}">Olaszország</a>
+            </li>
+        </ul>
+
+    </div>
+</nav>
+<nav id="mid-nav2" class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{{ url_for('home', month='all') }}">Összes</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMid" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarMid">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', year=year, country=country, month=1) }}">Január</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country=country, year=year, month=2) }}">Február</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country=country, year=year, month=3) }}">Március</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country=country, year=year, month=4) }}">Április</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country=country, year=year, month=5) }}">Május</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country=country, year=year, month=6) }}">Június</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country=country, year=year, month=7) }}">Július</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country=country, year=year, month=8) }}">Augusztus</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country=country, year=year, month=9) }}">Szeptember</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country=country, year=year, month=10) }}">Október</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country=country, year=year, month=11) }}">November</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home', country=country, year=year, month=12) }}">December</a>
+            </li>
+        </ul>
+
+    </div>
+</nav>
+<a href="{{ url_for('home') }}"><h2 class="text-center">Lista Nézet</h2></a>
+<!-----------------------------Cards Section----------------------------->
+     <hr>
+       <h2 class="text-center">Naptár Nézet</h2>
+        <div class="container" id='calendar'></div>
+        <script>
+            let calendarEl = document.getElementById
+            ('calendar');
+
+            let calendar = new FullCalendar.Calendar
+            (calendarEl, {
+                events : [
+                {% for event in events_data %}
+                {
+                    title : '{{ event.name }}',
+                    start : '{{ event.start_date.strftime("%Y-%m-%d") }}',
+                    url: '{{ url_for('event', id=event.id) }}',
+                },
+                {% endfor %}
+                ],
+
+                firstDay: 1,
+                locale: 'hu'
+            });
+
+            calendar.render();
+        </script>
+
+{% endblock %}

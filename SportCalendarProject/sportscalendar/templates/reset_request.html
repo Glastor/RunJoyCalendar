@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %} Reset_Request {% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/sign-in.css') }}">
+{% endblock %}
+{% block content %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Új Jelszó Igénylés</h5>
+                    <form method="POST" action="{{ url_for('reset_request') }}" class="form-signin" novalidate>
+                        {{ form.csrf_token }}
+                        <div class="form-outline mb-2">
+                            {{ form.email(class="form-control form-control-lg", id="inputEmail" ,placeholder="E-mail") }}
+                            {{ form.email.label(class="form-label") }}
+                            {% for err in form.email.errors %}
+                            <span style="color:red">{{ err }}</span>
+                            {% endfor %}
+
+                        </div>
+                         {{ form.submit(class="btn btn-lg btn-primary btn-block text-uppercase") }}
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

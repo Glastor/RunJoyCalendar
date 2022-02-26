@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %} Sign in Page ***** {% endblock %}
+
+{% block header %}
+<link rel="stylesheet" href="{{ url_for('static', filename='/css/sign-in.css') }}">
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Belépés</h5>
+                    <form method="POST" action="{{ url_for('login') }}" class="form-signin" novalidate>
+                        {{ loginform.csrf_token }}
+                        <div class="form-outline mb-2">
+                            {{ loginform.email(class="form-control form-control-lg", id="inputEmail" ,placeholder="E-mail") }}
+                            {{ loginform.email.label(class="form-label") }}
+                            {% for err in loginform.email.errors %}
+                            <span style="color:red">{{ err }}</span>
+                            {% endfor %}
+
+                        </div>
+                        <div class="form-outline mb-2">
+                            {{ loginform.password(class="form-control form-control-lg", id="inputPassword" ,placeholder="Jelszó") }}
+                            {{ loginform.password.label(class="form-label") }}
+                            {% for err in loginform.password.errors %}
+                            <span style="color:red">{{ err }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-4 ml-4">
+                            {{ loginform.remember(class="form-check-input") }}
+                            {{ loginform.remember.label(class="custom-control-label") }}
+                            {% for err in loginform.remember.errors %}
+                            <span style="color:red">{{ err }}</span>
+                            {% endfor %}
+                        </div>
+
+                         {{ loginform.submit(class="btn btn-lg btn-primary btn-block text-uppercase") }}
+                         <div class="form-outline mt-2">
+                            <a href="{{ url_for('reset_request') }}">Elfelejtett jelszó?</a>
+                         </div>
+                        <hr class="my-4">
+                        <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit"><i class="fab fa-google mr-2"></i> Belépés Google fiókkal</button>
+                        <button class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit"><i class="fab fa-facebook-f mr-2"></i> Belépés Facebook fiókkal</button>
+                         </form>
+
+
+                </div>
+            </div>
+        </div>
+<!------------------------------Regisztráció-------------------------------------------------->
+         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Új regisztráció</h5>
+                    <form method="POST" action="{{ url_for('register') }}" class="form-signin" novalidate>
+                        {{ regform.csrf_token }}
+                       <div class="form-outline mb-2">
+                           {{ regform.lastname(class="form-control form-control-lg", id="form3Example1cg" ,placeholder="Vezetéknév") }}
+                           {{ regform.lastname.label(class="form-label") }}
+                           {% for err in regform.lastname.errors %}
+                            <span style="color:red">{{ err }}</span>
+                            {% endfor %}
+                        </div>
+                         <div class="form-outline mb-2">
+                           {{ regform.firstname(class="form-control form-control-lg", id="form3Example1cg" ,placeholder="Keresztnév") }}
+                           {{ regform.firstname.label(class="form-label") }}
+                           {% for err in regform.firstname.errors %}
+                            <span style="color:red">{{ err }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-outline mb-2">
+                           {{ regform.email(class="form-control form-control-lg", id="form3Example3cg" ,placeholder="E-mail") }}
+                           {{ regform.email.label(class="form-label") }}
+                             {% for err in regform.email.errors %}
+                            <span style="color:red">{{ err }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-outline mb-2">
+                           {{ regform.password(class="form-control form-control-lg", id="form3Example4cg" ,placeholder="Jelszó") }}
+                           {{ regform.password.label(class="form-label") }}
+                             {% for err in regform.password.errors %}
+                            <span style="color:red">{{ err }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-outline mb-2">
+                           {{ regform.confirm_password(class="form-control form-control-lg", id="form3Examplecg" ,placeholder="Jelszó") }}
+                           {{ regform.confirm_password.label(class="form-label") }}
+                             {% for err in regform.confirm_password.errors %}
+                            <span style="color:red">{{ err }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="ml-4 mb-4">
+                            {{ regform.terms(class="form-check-input") }}
+                            {{ regform.terms.label(class="custom-control-label") }}
+                             {% for err in regform.terms.errors %}
+                            <span style="color:red">{{ err }}</span>
+                            {% endfor %}
+                          </div>
+
+
+                            <hr class="my-4">
+                                 {{ regform.submit(class="btn btn-lg btn-primary btn-block text-uppercase") }}
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

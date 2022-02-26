@@ -1,0 +1,142 @@
+/* ubuntu-regular - latin
+color palette:
+FBF8F1
+F7ECDE
+E9DAC1
+54BAB9*/
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/static/font/ubuntu-v19-latin-regular.eot'); /* IE9 Compat Modes */
+  src: local(''),
+       url('/static/font/ubuntu-v19-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('/static/font/ubuntu-v19-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('/static/font/ubuntu-v19-latin-regular.woff') format('woff'), /* Modern Browsers */
+       url('/static/font/ubuntu-v19-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('/static/font/ubuntu-v19-latin-regular.svg#Ubuntu') format('svg'); /* Legacy iOS */
+}
+
+body {
+  font-family: "Ubuntu";
+  font-weight: bold;
+  font-color: black;
+  max-width: 1280px;
+  margin-right:auto;
+  margin-left:auto;
+  /* fallback for old browsers */
+  background: #84fab0;
+
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(to right, rgba(132, 250, 176, 0.5), rgba(143, 211, 244, 0.5));
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to right, rgba(132, 250, 176, 0.5), rgba(143, 211, 244, 0.5))
+}
+
+
+.main-container {
+    background-color: #FBF8F1;
+}
+/* ------------------------NAVBAR Stuff_---------------------------------*/
+
+#navbarNav {
+padding: 0% 2% 0% 0%;
+ padding-right: 20px;
+ padding-left: 20px;
+}
+
+#navbarNav ul li {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+/* ------------------------Index.html Banner Stuff_---------------------------------*/
+
+.index-banner{
+   position: relative;
+   height: 50vh;
+   background-image: url('/static/image/bannerBG.jpg');
+   background-size: cover;
+   color: blue;
+}
+
+.sub_div {
+    position: absolute;
+    bottom: 0px;
+    margin-bottom: 3%;
+    margin-left: 5%;
+}
+
+.btn-primary{
+    font-family: "Ubuntu";
+    background-color: #FF5733;
+    border-color: #FF5733;
+}
+.banner-button{
+    margin-top: 90%;
+}
+
+.btn{
+margin: 0% 3% 0% 0%;
+}
+
+/* ------------------------section event handler---------------------------------*/
+
+.event-handler{
+    background-color: #FBF8F1;
+    margin-right:auto;
+    margin-left:auto;
+}
+/* ------------------------Footer---------------------------------*/
+.account-creation {
+background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* ------------------------Media Querry---------------------------------*/
+@media screen and (max-width: 992px) {
+    .index-banner{
+         height: 43vh;
+    }
+ /*     #navbarMid.collapse {
+       display: none !important;
+   }*/
+}
+
+@media screen and (max-width: 600px) {
+    .index-banner{
+        height: 37vh;
+    }
+}
+
+/* -------------------------- REGISTER.HTML------------------------*/
+
+.gradient-custom-4 {
+  /* fallback for old browsers */
+  background: #84fab0;
+
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(to right, rgba(132, 250, 176, 1), rgba(143, 211, 244, 1));
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to right, rgba(132, 250, 176, 1), rgba(143, 211, 244, 1))
+}
+
+.banner-img {
+     width: 100%;
+     max-height: 300px;
+     object-fit: cover;
+}
+
+/* Set the size of the div element that contains the map */
+#map {
+  height: 400px;
+  max-width: 1180%;
+  /* The width is the width of the web page */
+}
+
+
+.account-img {
+     width: 100px;
+     height: 100px;
+}

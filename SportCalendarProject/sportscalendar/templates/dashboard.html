@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+{% block title %} Dasboard ***** {% endblock %}
+{% block header %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js"></script>
+{% endblock %}
+{% block content %}
+<!--------------------------------- LEFT Section ---------------------------->
+<div class="row container-fluid">
+    <div class="col-md-3 pt-4">
+        <div class="text-center">
+            <img src="{{ image_file }}" class="rounded-circle account-img text-center">
+        </div>
+        <div class="text-center">
+             {{ current_user.lastname }} {{ current_user.firstname }}
+        </div>
+        <div class="container mt-3">
+            Hátralevő versenyeid idén: {{ races_left }}
+        </div>
+        <div class="container mt-3">
+            Idén teljesítettél {{ races_this_year }} versenyt ami összesen {{ km_this_year }} km
+        </div>
+        <div class="container mt-3">
+            Összesen teljesítettél {{ all_races }} versenyt ami összesen {{ all_km }} km
+        </div>
+        <div>
+            <hr>
+            <p>
+
+                    <span>Fiók Beállítások</span> <i class="fa-solid fa-gear ml-2"></i>
+
+                <div class="text-center" id="account-settings">
+                        <form method="POST" action="" class="form-signin" enctype="multipart/form-data" novalidate>
+                        {{ form.csrf_token }}
+                    <div class="ml-4 mb-4">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control form-control-lg", id="form3Example3cg" ,placeholder="Új e-mail") }}
+                            {% for err in form.email.errors %}
+                            <span style="color:red">{{ err }}</span>
+                            {% endfor %}
+                    </div>
+                     Hírlevél beállítások:
+                    <div class="ml-4 mb-4">
+                            {{ form.newsletter(class="form-check-input") }}
+                            {{ form.newsletter.label(class="custom-control-label") }}
+                             {% for err in form.newsletter.errors %}
+                            <span style="color:red">{{ err }}</span>
+                            {% endfor %}
+                    </div>
+                    <div class="mb-4">
+                            {{ form.picture(class="form-control-file") }}
+                            {{ form.picture.label() }}
+                             {% for err in form.picture.errors %}
+                            <span style="color:red">{{ err }}</span>
+                            {% endfor %}
+                    </div>
+                    <hr class="my-4">
+                                 {{ form.submit(class="btn btn-lg btn-primary btn-block") }}
+                </form>
+                </div>
+            </p>
+        </div>
+    </div>
+
+
+    <!--------------------------------- RIGHT Section ---------------------------->
+    <div class="col-md-9">
+<!-------------------------CALENDAR SECTION------------------------------->
+        <hr>
+        <p>
+            Naptáram
+        </p>
+        <div class="container-fluid" id='calendar'></div>
+        <script>
+            let calendarEl = document.getElementById
+            ('calendar');
+
+            let calendar = new FullCalendar.Calendar
+            (calendarEl, {
+                events : [
+                {% for race in races %}
+                {
+                    title : '{{ race.event.name }}{{ race.name }}',
+                    start : '{{ race.start_date.strftime("%Y-%m-%d") }}',
+                    url: '{{ url_for('event', id=race.event.id) }}',
+                },
+                {% endfor %}
+                ],
+
+                firstDay: 1,
+                locale: 'hu'
+            });
+
+            calendar.render();
+        </script>
+
+<!-------------------------  My RACES Section ----------------------- -->
+        <hr>
+        <p>
+            <a class="btn" data-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false"
+               aria-controls="collapseExample1">
+                <span>My races</span> <i class="fas fa-caret-down ml-2"></i>
+            </a>
+        </p>
+        <div class="collapse" id="collapseExample1">
+            <div class="row container-fluid justify-content-md-center">
+
+                {% for race in races %}
+                {% if race.start_date >= today %}
+                <!-- RACE CARD -->
+                <div class="card mb-3 ml-2" style="width: 410px;">
+                    <div class="row no-gutters">
+                        <div class="col-md-12">
+                            <div class="card-body">
+                                <h4 class="card-title">{{ race.name }}</h4>
+                                <p class="card-text">
+                                <ul class="card-text">
+                                    <li><i class="fa fa-calendar-day"></i><span class="ml-2"> {{ race.start_date.strftime('%Y-%m-%d   %A  %H:%M') }} </span>
+                                    </li>
+                                    <li><i class="fa fa-map-marker-alt"></i><span class="ml-3">{{ race.event.country }} / {{ race.event.city }}</span>
+                                    </li>
+                                    <li><i class="fas fa-running"></i><span class="ml-3">{{ race.type }}</span></li>
+                                    <li><i class="fas fa-road"></i></i><span class="ml-3">{{ "{:g}".format(race.distance) }} km</span>
+                                    </li>
+                                    <li><i class="fas fa-at"></i></i><a href="{{ race.event.event_url }}" class="ml-3"
+                                                                        target="_blank">{{ race.event.name }}</a></li>
+                                </ul>
+                                </p>
+                                {% if current_user.is_authenticated == False %}
+                                <a href="{{ url_for('register') }}" style="float: left;" type="button"
+                                   class="btn-sm btn-success mb-3">Hozzáadás a versenyeimhez</a>
+                                {% elif race not in current_user.following %}
+                                <a href="{{ url_for('add_race', race_id=race.id) }}">
+                                    <button style="float: left;" type="button" class="btn-sm btn-success mb-3">Hozzáadás
+                                        a
+                                        versenyeimhez
+                                    </button>
+                                </a>
+                                {% else %}
+                                <a href="{{ url_for('remove_race', race_id=race.id) }}">
+                                    <button style="float: right;" type="button" class="btn-sm btn-danger mb-3">Törlés a
+                                        versenyeimből
+                                    </button>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- RACE CARD END -->
+                {% endif %}
+                {% endfor %}
+
+            </div>
+            <!----------------------------------------   PAST RACES SECTION-------------------------------------------------->
+            <div class="row container-fluid justify-content-md-center">
+                <a class="btn" data-toggle="collapse" href="#collapsePastRaces" role="button" aria-expanded="false"
+                   aria-controls="collapsePastRaces">
+                    <span>Past Races</span> <i class="fas fa-caret-down ml-2"></i>
+                </a>
+            </div>
+            <div class="collapse" id="collapsePastRaces">
+                <h4>2022</h4>
+                <div class="row container-fluid justify-content-md-center">
+
+                {% for race in races %}
+                {% if race.start_date <= today and race.start_date.year == 2022 %}
+                <!-- RACE CARD -->
+                <div class="card mb-3 ml-2" style="width: 410px;">
+                    <div class="row no-gutters">
+                        <div class="col-md-12">
+                            <div class="card-body">
+                                <h4 class="card-title">{{ race.name }}</h4>
+                                <p class="card-text">
+                                <ul class="card-text">
+                                    <li><i class="fa fa-calendar-day"></i><span class="ml-2"> {{ race.start_date.strftime('%Y-%m-%d   %A  %H:%M') }} </span>
+                                    </li>
+                                    <li><i class="fa fa-map-marker-alt"></i><span class="ml-3">{{ race.event.country }} / {{ race.event.city }}</span>
+                                    </li>
+                                    <li><i class="fas fa-running"></i><span class="ml-3">{{ race.type }}</span></li>
+                                    <li><i class="fas fa-road"></i></i><span class="ml-3">{{ "{:g}".format(race.distance) }} km</span>
+                                    </li>
+                                    <li><i class="fas fa-at"></i></i><a href="{{ race.event.event_url }}" class="ml-3"
+                                                                        target="_blank">{{ race.event.name }}</a></li>
+                                </ul>
+                                </p>
+                                {% if current_user.is_authenticated == False %}
+                                <a href="{{ url_for('register') }}" style="float: left;" type="button"
+                                   class="btn-sm btn-success mb-3">Hozzáadás a versenyeimhez</a>
+                                {% elif race not in current_user.following %}
+                                <a href="{{ url_for('add_race', race_id=race.id) }}">
+                                    <button style="float: left;" type="button" class="btn-sm btn-success mb-3">Hozzáadás
+                                        a
+                                        versenyeimhez
+                                    </button>
+                                </a>
+                                {% else %}
+                                <a href="{{ url_for('remove_race', race_id=race.id) }}">
+                                    <button style="float: right;" type="button" class="btn-sm btn-danger mb-3">Törlés a
+                                        versenyeimből
+                                    </button>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- RACE CARD END -->
+                {% endif %}
+                {% endfor %}
+                </div>
+
+
+                 <h4>2021</h4>
+                <div class="row container-fluid justify-content-md-center">
+                 {% for race in races %}
+                {% if race.start_date.year == 2021 %}
+                <!-- RACE CARD -->
+                <div class="card mb-3 ml-2" style="width: 410px;">
+                    <div class="row no-gutters">
+                        <div class="col-md-12">
+                            <div class="card-body">
+                                <h4 class="card-title">{{ race.name }}</h4>
+                                <p class="card-text">
+                                <ul class="card-text">
+                                    <li><i class="fa fa-calendar-day"></i><span class="ml-2"> {{ race.start_date.strftime('%Y-%m-%d   %A  %H:%M') }} </span>
+                                    </li>
+                                    <li><i class="fa fa-map-marker-alt"></i><span class="ml-3">{{ race.event.country }} / {{ race.event.city }}</span>
+                                    </li>
+                                    <li><i class="fas fa-running"></i><span class="ml-3">{{ race.type }}</span></li>
+                                    <li><i class="fas fa-road"></i></i><span class="ml-3">{{ "{:g}".format(race.distance) }} km</span>
+                                    </li>
+                                    <li><i class="fas fa-at"></i></i><a href="{{ race.event.event_url }}" class="ml-3"
+                                                                        target="_blank">{{ race.event.name }}</a></li>
+                                </ul>
+                                </p>
+                                {% if current_user.is_authenticated == False %}
+                                <a href="{{ url_for('register') }}" style="float: left;" type="button"
+                                   class="btn-sm btn-success mb-3">Hozzáadás a versenyeimhez</a>
+                                {% elif race not in current_user.following %}
+                                <a href="{{ url_for('add_race', race_id=race.id) }}">
+                                    <button style="float: left;" type="button" class="btn-sm btn-success mb-3">Hozzáadás
+                                        a
+                                        versenyeimhez
+                                    </button>
+                                </a>
+                                {% else %}
+                                <a href="{{ url_for('remove_race', race_id=race.id) }}">
+                                    <button style="float: right;" type="button" class="btn-sm btn-danger mb-3">Törlés a
+                                        versenyeimből
+                                    </button>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- RACE CARD END -->
+                {% endif %}
+                {% endfor %}
+                </div>
+
+    </div>
+</div>
+{% endblock %}
+
